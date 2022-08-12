@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 @Component
 public class CategorySeeder implements CommandLineRunner {
 
-    private CategoryRepository categoryRepository;
+    private final CategoryRepository categoryRepository;
 
     public CategorySeeder(CategoryRepository categoryRepository) {
         this.categoryRepository = categoryRepository;
