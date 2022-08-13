@@ -4,6 +4,7 @@ import com.softuni.battleShips.models.Category;
 import com.softuni.battleShips.models.Ship;
 import com.softuni.battleShips.models.User;
 import com.softuni.battleShips.models.dto.CreateShipDTO;
+import com.softuni.battleShips.models.dto.ShipDTO;
 import com.softuni.battleShips.models.enums.ShipType;
 import com.softuni.battleShips.repositories.CategoryRepository;
 import com.softuni.battleShips.repositories.ShipRepository;
@@ -11,7 +12,9 @@ import com.softuni.battleShips.repositories.UserRepository;
 import com.softuni.battleShips.session.LoggedUser;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ShipService {
@@ -31,19 +34,22 @@ public class ShipService {
 
 
         Optional<Ship> byName = this.shipRepository.findByName(shipDTO.getName());
-        if(byName.isPresent()){
+        if (byName.isPresent()) {
             return false;
         }
 
         ShipType type = null;
 
-        switch (shipDTO.getCategory()){
-            case 0: type = ShipType.BATTLE;
-            break;
-            case 1: type = ShipType.CARGO;
-            break;
-            case 2: type = ShipType.PATROL;
-            break;
+        switch (shipDTO.getCategory()) {
+            case 0:
+                type = ShipType.BATTLE;
+                break;
+            case 1:
+                type = ShipType.CARGO;
+                break;
+            case 2:
+                type = ShipType.PATROL;
+                break;
         }
 
         Category category = this.categoryRepository.findByName(type);
@@ -59,5 +65,23 @@ public class ShipService {
         shipRepository.save(ship);
         return true;
 
+    }
+
+
+    public List<ShipDTO> getShipsOwnedBy(long ownerId) {
+        return this.shipRepository.findByUserId(ownerId)
+                .stream().map(ShipDTO::new).collect(Collectors.toList());
+    }
+
+    public List<ShipDTO> getShipsNotOwnedBy(long ownerId) {
+        return this.shipRepository.findByUserIdNot(ownerId)
+                .stream().map(ShipDTO::new).collect(Collectors.toList());
+    }
+
+    public List<ShipDTO> getAllSorted() {
+        return this.shipRepository.findByOrderByHealthAscNameDescPowerAsc()
+                .stream()
+                .map(ShipDTO::new)
+                .collect(Collectors.toList());
     }
 }

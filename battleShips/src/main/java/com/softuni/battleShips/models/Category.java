@@ -19,7 +19,9 @@ public class Category {
     @Column(columnDefinition = "text")
     private String description;
 
-    public Category(ShipType name){
+    public Category(){}
+
+    public Category(ShipType name) {
         this.name = name;
     }
 

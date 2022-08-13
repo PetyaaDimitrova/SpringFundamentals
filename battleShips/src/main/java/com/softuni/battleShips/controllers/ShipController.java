@@ -13,7 +13,6 @@ import javax.validation.Valid;
 
 @Controller
 public class ShipController {
-
     private final ShipService shipService;
 
     public ShipController(ShipService shipService) {
@@ -21,30 +20,29 @@ public class ShipController {
     }
 
     @ModelAttribute("createShipDTO")
-    public CreateShipDTO initCreateShipDTO(){
+    public CreateShipDTO initCreateShipDTO() {
         return new CreateShipDTO();
     }
 
-
     @GetMapping("/ships/add")
-    public String ships(){
+    public String ships() {
         return "ship-add";
     }
 
     @PostMapping("/ships/add")
     public String ships(@Valid CreateShipDTO createShipDTO,
                         BindingResult bindingResult,
-                        RedirectAttributes redirectAttributes){
+                        RedirectAttributes redirectAttributes) {
 
-        if(bindingResult.hasErrors() || !this.shipService.create(createShipDTO)){
-            redirectAttributes.addFlashAttribute("shipDTO", createShipDTO);
-            redirectAttributes
-                    .addFlashAttribute("org.springframework.validation.BindingResult.createShipDTO", bindingResult);
+        if (bindingResult.hasErrors() || !this.shipService.create(createShipDTO)) {
+            redirectAttributes.addFlashAttribute("createShipDTO", createShipDTO);
+            redirectAttributes.addFlashAttribute(
+                    "org.springframework.validation.BindingResult.createShipDTO", bindingResult);
+
             return "redirect:/ships/add";
         }
 
+
         return "redirect:/home";
-
     }
-
 }
