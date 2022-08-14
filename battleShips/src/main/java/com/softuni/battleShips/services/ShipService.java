@@ -18,65 +18,69 @@ import java.util.stream.Collectors;
 
 @Service
 public class ShipService {
+
     private final ShipRepository shipRepository;
     private final CategoryRepository categoryRepository;
     private final LoggedUser loggedUser;
     private final UserRepository userRepository;
 
-    public ShipService(ShipRepository shipRepository, CategoryRepository categoryRepository, LoggedUser loggedUser, UserRepository userRepository) {
+    public ShipService(ShipRepository shipRepository,
+                       CategoryRepository categoryRepository,
+                       LoggedUser loggedUser,
+                       UserRepository userRepository) {
         this.shipRepository = shipRepository;
         this.categoryRepository = categoryRepository;
         this.loggedUser = loggedUser;
         this.userRepository = userRepository;
     }
 
-    public boolean create(CreateShipDTO shipDTO) {
+    public boolean create(CreateShipDTO createShipDTO) {
 
+        Optional<Ship> byName =
+                this.shipRepository.findByName(createShipDTO.getName());
 
-        Optional<Ship> byName = this.shipRepository.findByName(shipDTO.getName());
         if (byName.isPresent()) {
             return false;
         }
 
-        ShipType type = null;
-
-        switch (shipDTO.getCategory()) {
-            case 0:
-                type = ShipType.BATTLE;
-                break;
-            case 1:
-                type = ShipType.CARGO;
-                break;
-            case 2:
-                type = ShipType.PATROL;
-                break;
-        }
+        ShipType type = switch (createShipDTO.getCategory()) {
+            case 0 -> ShipType.BATTLE;
+            case 1 -> ShipType.CARGO;
+            case 2 -> ShipType.PATROL;
+            default -> ShipType.BATTLE;
+        };
 
         Category category = this.categoryRepository.findByName(type);
         Optional<User> owner = this.userRepository.findById(this.loggedUser.getId());
 
         Ship ship = new Ship();
-        ship.setName(shipDTO.getName());
-        ship.setCreated(shipDTO.getCreated());
+        ship.setName(createShipDTO.getName());
+        ship.setPower(createShipDTO.getPower());
+        ship.setHealth(createShipDTO.getHealth());
+        ship.setCreated(createShipDTO.getCreated());
         ship.setCategory(category);
-        ship.setHealth(shipDTO.getHealth());
-        ship.setPower(shipDTO.getPower());
         ship.setUser(owner.get());
-        shipRepository.save(ship);
+
+        this.shipRepository.save(ship);
+
         return true;
-
     }
-
 
     public List<ShipDTO> getShipsOwnedBy(long ownerId) {
         return this.shipRepository.findByUserId(ownerId)
-                .stream().map(ShipDTO::new).collect(Collectors.toList());
+                .stream()
+                .map(ShipDTO::new)
+                .collect(Collectors.toList());
     }
+
 
     public List<ShipDTO> getShipsNotOwnedBy(long ownerId) {
         return this.shipRepository.findByUserIdNot(ownerId)
-                .stream().map(ShipDTO::new).collect(Collectors.toList());
+                .stream()
+                .map(ShipDTO::new)
+                .collect(Collectors.toList());
     }
+
 
     public List<ShipDTO> getAllSorted() {
         return this.shipRepository.findByOrderByHealthAscNameDescPowerAsc()

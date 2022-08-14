@@ -18,7 +18,7 @@ public class LoggedUser {
 
     public void logout(){
         this.id = 0;
-        this.fullName = "";
+        this.fullName = null;
     }
 
     public long getId() {

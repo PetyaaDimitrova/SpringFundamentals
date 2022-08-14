@@ -1,28 +1,30 @@
 <!DOCTYPE html>
-<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Battleships Application</title>
     <th:block th:replace="~{fragments/head}"></th:block>
 </head>
 <body class="body-main">
 <header th:include="~{fragments/navigation}"></header>
+
 <main role="main">
     <div class="jumbotron">
         <h1 class="text-center p-5 text-white font-weight-bold">Battle</h1>
-        <form  th:action="@{/battle}"
-               th:method="post"
-               th:object="${startBattleDTO}" class="row mb-2">
+        <form th:action="@{/battle}"
+              th:method="post"
+              th:object="${startBattleDTO}"
+              class="row mb-2">
             <div class="col-md-6">
                 <div class="card flex-md-row bg-blur mb-4 box-shadow h-md-250">
                     <div class="card-body d-flex flex-column align-items-start">
                         <strong class="d-inline-block mb-2 text-primary">Attacker</strong>
-                        <span th:text="${@loggedUser.fullName}"></span>
+                        <span class="user-full-name" th:text="${@loggedUser.fullName}"></span>
                         <h3 class="mb-0 text-white">
                             Select the attacker
                         </h3>
                         <div class="mb-1 text-white">Select one of the ships that are owned by the current user</div>
                         <select class="form-select mt-5" aria-label="Default select example" th:field="*{attackerId}">
-                            <option value="0" selected>Select one of the ships that are owned by other users</option>
+                            <option value="0" selected>Select one of the ships that are owned by the current user</option>
                             <option th:each="ship: ${ownShips}" th:value="${ship.getId()}" th:text="${ship.getName()}" />
                         </select>
                     </div>
@@ -41,8 +43,8 @@
                         </h3>
                         <div class="mb-1 text-white">Select one of the ships that are owned by other users</div>
                         <select class="form-select mt-5" aria-label="Default select example" th:field="*{defenderId}">
-                        <option value="0" selected>Select one of the ships that are owned by other users</option>
-                        <option th:each="ship: ${enemyShips}" th:value="${ship.getId()}" th:text="${ship.getName()}" />
+                            <option value="0" selected>Select one of the ships that are owned by other users</option>
+                            <option th:each="ship: ${enemyShips}" th:value="${ship.getId()}" th:text="${ship.getName()}" />
                         </select>
                     </div>
                     <img class="card-img-right flex-auto d-none d-md-block" data-src="holder.js/200x250?theme=thumb"
@@ -73,6 +75,6 @@
         </div>
     </div>
 </main>
-<th:block th:replace="~{fragments/footer}"></th:block>
+<th:block th:replace="~{fragments/footer}" />
 </body>
 </html>
