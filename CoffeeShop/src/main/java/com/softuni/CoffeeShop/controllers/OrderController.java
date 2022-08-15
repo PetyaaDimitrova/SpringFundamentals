@@ -1,12 +1,14 @@
 package com.softuni.CoffeeShop.controllers;
 
 import com.softuni.CoffeeShop.models.dto.CreateOrderDTO;
+import com.softuni.CoffeeShop.models.dto.OrderDTO;
 import com.softuni.CoffeeShop.services.AuthService;
 import com.softuni.CoffeeShop.services.OrderService;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -29,6 +31,11 @@ public class OrderController {
         return new CreateOrderDTO();
     }
 
+    @ModelAttribute("orderDTO")
+    public OrderDTO initOrderForm() {
+        return new OrderDTO();
+    }
+
     @GetMapping("/orders/add")
     public String orders() {
         if (!this.authService.isLoggedIn()) {
@@ -39,7 +46,7 @@ public class OrderController {
     }
 
     @PostMapping("/orders/add")
-    public String ships(@Valid CreateOrderDTO createOrderDTO,
+    public String order(@Valid CreateOrderDTO createOrderDTO,
                         BindingResult bindingResult,
                         RedirectAttributes redirectAttributes) {
 
@@ -54,6 +61,13 @@ public class OrderController {
 
             return "redirect:/orders/add";
         }
+
+        return "redirect:/home";
+    }
+
+    @GetMapping("/ready/{id}")
+    public String ready(@PathVariable Long id) {
+       orderService.readyOrder(id);
 
         return "redirect:/home";
     }

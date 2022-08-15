@@ -28,7 +28,8 @@ public class Order {
     @ManyToOne
     private User user;
 
-    public Order(){}
+    public Order() {
+    }
 
     public long getId() {
         return id;

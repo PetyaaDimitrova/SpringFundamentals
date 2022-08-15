@@ -2,12 +2,15 @@ package com.softuni.CoffeeShop.services;
 
 import com.softuni.CoffeeShop.models.User;
 import com.softuni.CoffeeShop.models.dto.UserLoginDTO;
+import com.softuni.CoffeeShop.models.dto.UserOrdersDTO;
 import com.softuni.CoffeeShop.models.dto.UserRegistrationDTO;
 import com.softuni.CoffeeShop.repositories.UserRepository;
 import com.softuni.CoffeeShop.session.LoggedUser;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class AuthService {
@@ -64,10 +67,20 @@ public class AuthService {
     public boolean isLoggedIn() {
         return this.userSession.getId() > 0;
     }
+ /*   public List<UserOrdersDTO> findAllUserAndCountOfOrdersOrderByCountDesc() {
+        return userRepository.findAllByOrdersCountDesc().stream()
+                .map(user -> {
+                    UserOrdersDTO userOrdersDTO = new UserOrdersDTO();
+                    userOrdersDTO.setUsername(user.getUsername());
+                    userOrdersDTO.setCountOfOrders(user.);
+                    return userOrdersDTO;
+                })
+                .collect(Collectors.toList());
+    }
+
+  */
 
     public long getLoggedUserId() {
         return this.userSession.getId();
     }
-
-
 }

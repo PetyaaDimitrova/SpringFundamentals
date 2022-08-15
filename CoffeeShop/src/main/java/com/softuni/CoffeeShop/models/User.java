@@ -1,6 +1,10 @@
 package com.softuni.CoffeeShop.models;
 
+import com.softuni.CoffeeShop.models.dto.UserOrdersDTO;
+
 import javax.persistence.*;
+import java.util.Collection;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -72,4 +76,6 @@ public class User {
     public void setEmail(String email) {
         this.email = email;
     }
+
+
 }

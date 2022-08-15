@@ -75,11 +75,14 @@ public class OrderService {
                 .collect(Collectors.toList());
     }
 
-
-    public List<OrderDTO> getAllSorted() {
+    public List<OrderDTO> findAllOrderOrderByPriceDesc() {
         return this.orderRepository.findByOrderByPriceDesc()
                 .stream()
                 .map(OrderDTO::new)
                 .collect(Collectors.toList());
+    }
+
+    public void readyOrder(Long id) {
+       this.orderRepository.deleteById(id);
     }
 }
