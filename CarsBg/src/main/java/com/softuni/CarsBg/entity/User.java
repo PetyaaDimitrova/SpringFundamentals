@@ -1,9 +1,8 @@
 package com.softuni.CarsBg.entity;
 
-import com.softuni.CarsBg.entity.enums.UserRole;
+import com.softuni.CarsBg.entity.enums.UserRoleEnum;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,16 +20,17 @@ public class User extends BaseEntity{
     private String lastName;
     @Column(nullable = false)
     private boolean isActive;
-    @Column(nullable = false)
-    @Enumerated(EnumType.ORDINAL)
-    private UserRole role;
+    @ManyToMany(fetch = FetchType.EAGER)
+    private List<UserRole> userRoles = new ArrayList<>();
     @Column(nullable = false)
     private String imageUrl;
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private List<Offer> offers = new ArrayList<>();
+   
+    public List<UserRole> getUserRoles() {
+        return userRoles;
+    }
 
-
-    public User() {
+    public void setUserRoles(List<UserRole> userRoles) {
+        this.userRoles = userRoles;
     }
 
     public String getUsername() {
@@ -71,14 +71,6 @@ public class User extends BaseEntity{
 
     public void setActive(boolean active) {
         isActive = active;
-    }
-
-    public UserRole getRole() {
-        return role;
-    }
-
-    public void setRole(UserRole role) {
-        this.role = role;
     }
 
     public String getImageUrl() {

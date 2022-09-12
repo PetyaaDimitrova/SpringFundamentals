@@ -36,8 +36,7 @@ public class Offer extends BaseEntity {
     private User user;
 
 
-    public Offer() {
-    }
+
 
     public String getDescription() {
         return description;
