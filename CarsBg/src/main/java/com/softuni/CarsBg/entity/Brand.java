@@ -1,17 +1,19 @@
 package com.softuni.CarsBg.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "brands")
 public class Brand extends BaseEntity{
 
+    @Column(nullable = false)
     private String name;
-    private LocalDateTime created;
-    private LocalDateTime modified;
 
+    @OneToMany(mappedBy = "brand", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private List<Model> model = new ArrayList<>();
 
     public Brand() {
 
@@ -25,20 +27,6 @@ public class Brand extends BaseEntity{
         this.name = name;
     }
 
-    public LocalDateTime getCreated() {
-        return created;
-    }
 
-    public void setCreated(LocalDateTime created) {
-        this.created = created;
-    }
-
-    public LocalDateTime getModified() {
-        return modified;
-    }
-
-    public void setModified(LocalDateTime modified) {
-        this.modified = modified;
-    }
 
 }
