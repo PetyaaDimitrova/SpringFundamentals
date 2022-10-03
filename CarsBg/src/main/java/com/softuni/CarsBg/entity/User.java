@@ -1,7 +1,5 @@
 package com.softuni.CarsBg.entity;
 
-import com.softuni.CarsBg.entity.enums.UserRoleEnum;
-
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,15 +19,15 @@ public class User extends BaseEntity{
     @Column(nullable = false)
     private boolean isActive;
     @ManyToMany(fetch = FetchType.EAGER)
-    private List<UserRole> userRoles = new ArrayList<>();
+    private List<Role> userRoles = new ArrayList<>();
     @Column(nullable = false)
     private String imageUrl;
-   
-    public List<UserRole> getUserRoles() {
+
+    public List<Role> getUserRoles() {
         return userRoles;
     }
 
-    public void setUserRoles(List<UserRole> userRoles) {
+    public void setUserRoles(List<Role> userRoles) {
         this.userRoles = userRoles;
     }
 
